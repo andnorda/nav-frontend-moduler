@@ -1,7 +1,6 @@
 /* eslint-disable */
 import dfs from 'depth-first';
 
-const scopeName = '@navds/';
 
 const getModulesFromContext = (context) => {
     const modules = {};
@@ -36,6 +35,7 @@ const getTextData = () => {
 };
 
 const getDependencies = (pkgName, edges) => {
+    console.log(pkgName);
     return dfs(edges, pkgName);
 };
 
@@ -55,6 +55,8 @@ const getOverviewModuleNameByPath = (path) => {
 };
 
 const getComponentData = () => {
+
+    const scopeName = '@navds';
     // Require all the files we need to cross reference
 
     const pkgContext = require.context('NavFrontendModules', true, /package\.json/);
@@ -102,7 +104,7 @@ const getComponentData = () => {
             mainModule,
             packageModules: pkgModules,
             manifest: pkg,
-            dependencies: getDependencies(pkgName.indexOf(scopeName) !== -1 ? (scopeName + '/' + pkgName) : pkgName, edges)
+            dependencies: getDependencies(pkgName.indexOf('nav-frontend-') === -1 ? (scopeName + '/' + pkgName) : pkgName, edges)
         };
     });
 
