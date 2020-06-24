@@ -16,6 +16,7 @@ const merge = require('merge2');
 const configureSvgIcon = require('react-svg-icon-generator-fork').default;
 const addVariablesExportPlugin = require('./_scripts/gulp-export-less-variables');
 const camelcase = require('lodash.camelcase');
+const startcase = require('lodash.startcase');
 
 const jsScripts = './packages/node_modules/*/src/**/*.js';
 const tsScripts = './packages/node_modules/*/src/**/*.ts*';
@@ -123,6 +124,11 @@ function parseTsAndAppendDocInfo(contents, file) {
         // Yeah, superhack. Men react-docgen-typescript velger alltid feil export fra tekstomrade filen
         if (docInfo.displayName === 'createDynamicHighlightingRule') {
             docInfo = docs[1];
+        } else if (docInfo.displayName === 'ForwardRefExoticComponent') {
+            // Erstatter displaynavn med filnavn. Nødvendig siden react-docgen ikke takler forwardRef komponenter.
+            let fileName = tsPath.split('/');
+            fileName = fileName[fileName.length - 1].replace('.tsx', '');
+            docInfo.displayName = startcase(fileName).replace(' ', '');
         }
 
         const exceptions = ['StatelessComponent', 'EventThrottler', 'Container'];
