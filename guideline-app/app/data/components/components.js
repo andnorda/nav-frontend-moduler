@@ -1,6 +1,7 @@
 /* eslint-disable */
 import dfs from 'depth-first';
 
+const scopeName = '@navds/';
 
 const getModulesFromContext = (context) => {
     const modules = {};
@@ -101,7 +102,7 @@ const getComponentData = () => {
             mainModule,
             packageModules: pkgModules,
             manifest: pkg,
-            dependencies: getDependencies(pkgName, edges)
+            dependencies: getDependencies(pkgName.indexOf(scopeName) !== -1 ? (scopeName + '/' + pkgName) : pkgName, edges)
         };
     });
 
